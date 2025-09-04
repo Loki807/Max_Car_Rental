@@ -1,0 +1,99 @@
+﻿@model Brand
+
+@{
+    ViewBag.Title = "Create Brand";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Create New Brand</h3>
+                </div>
+
+                <div class="card-body">
+                    <!-- IMPORTANT: enctype needed for file uploads -->
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label"></label>
+                            <input asp-for="Name" class="form-control" placeholder="Enter brand name" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="EstablishedYear" class="form-label"></label>
+                            <input asp-for="EstablishedYear" class="form-control" placeholder="Enter established year" />
+                            <span asp-validation-for="EstablishedYear" class="text-danger"></span>
+                        </div>
+
+                        <!-- Logo (URL or Path stored in Brand.BrandLogo) -->
+                        <div class="mb-3">
+                            <label asp-for="BrandLogo" class="form-label">Logo URL/Path (optional)</label>
+                            <input asp-for="BrandLogo" class="form-control" placeholder="e.g. /images/brands/toyota.png or https://..." />
+                            <span asp-validation-for="BrandLogo" class="text-danger"></span>
+                        </div>
+
+                        <!-- File upload (bind in action as IFormFile BrandLogoFile) -->
+                        <div class="mb-2">
+                            <label class="form-label">Upload Logo (optional)</label>
+                            <input type="file" name="BrandLogoFile" accept="image/*" class="form-control" />
+                            <div class="form-text">You can paste a URL above or upload a file. If both are provided, the upload can override the URL in the controller.</div>
+                        </div>
+
+                        <!-- Live preview -->
+                        <div class="mt-2">
+                            <img id="logoPreview" class="img-thumbnail d-none" style="max-height:120px;" alt="Logo preview" />
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Back to List
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-save"></i> Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // Preview from URL field
+        (function () {
+            const urlInput = document.getElementById("BrandLogo");
+            const fileInput = document.querySelector('input[name="BrandLogoFile"]');
+            const preview = document.getElementById("logoPreview");
+
+            function show(src) {
+                if (!src) { preview.classList.add("d-none"); preview.src = ""; return; }
+                preview.src = src;
+                preview.classList.remove("d-none");
+            }
+
+            if (urlInput) {
+                urlInput.addEventListener("input", function () {
+                    if (this.value && /^https?:|^\//i.test(this.value)) show(this.value);
+                    else show("");
+                });
+            }
+
+            if (fileInput) {
+                fileInput.addEventListener("change", function () {
+                    const f = this.files && this.files[0];
+                    if (f) show(URL.createObjectURL(f));
+                });
+            }
+        })();
+    </script>
+}
