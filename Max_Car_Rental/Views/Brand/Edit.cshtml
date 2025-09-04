@@ -1,0 +1,40 @@
+﻿@model Brand
+
+@{
+    ViewBag.Title = "Edit Brand";
+}
+
+<div class="container mt-4">
+    <h2>Edit Brand</h2>
+    <hr />
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="EstablishedYear" class="form-label"></label>
+            <input asp-for="EstablishedYear" class="form-control" />
+            <span asp-validation-for="EstablishedYear" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Brand Logo</label><br />
+            @if (!string.IsNullOrEmpty(Model.BrandLogo))
+            {
+                <img src="@Model.BrandLogo" alt="Logo" style="max-height:100px;" />
+            
+                <br />
+            }
+            <input type="file" name="BrandLogoFile" class="form-control mt-2" />
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
