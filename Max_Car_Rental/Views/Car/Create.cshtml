@@ -1,0 +1,90 @@
+﻿@model Max_Car_Rental.Models.Car
+
+@{
+    ViewBag.Title = "Create Car";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Add New Car</h3>
+                </div>
+
+                <div class="card-body">
+                    <!-- enctype required for image upload -->
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="CarName" class="form-label"></label>
+                            <input asp-for="CarName" class="form-control" placeholder="Enter car name" />
+                            <span asp-validation-for="CarName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CarModel" class="form-label"></label>
+                            <input asp-for="CarModel" class="form-control" placeholder="Enter car model" />
+                            <span asp-validation-for="CarModel" class="text-danger"></span>
+                        </div>
+
+                        <!-- Image URL -->
+                        <div class="mb-3">
+                            <label asp-for="ImageUrl" class="form-label">Image URL/Path (optional)</label>
+                            <input asp-for="ImageUrl" class="form-control" placeholder="e.g. /images/cars/car1.png or https://..." />
+                            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                        </div>
+
+                        <!-- File upload -->
+                        <div class="mb-2">
+                            <label class="form-label">Upload Car Image (optional)</label>
+                            <input type="file" name="CarImageFile" accept="image/*" class="form-control" />
+                            <div class="form-text">You can paste a URL above or upload a file. Upload overrides URL in controller.</div>
+                        </div>
+
+                        <!-- Availability -->
+                        <div class="mb-3 form-check">
+                            <input asp-for="Availability" class="form-check-input" />
+                            <label asp-for="Availability" class="form-check-label"></label>
+                        </div>
+
+                        <!-- Brand Dropdown -->
+                        <div class="mb-3">
+                            <label asp-for="BrandId" class="form-label">Brand</label>
+                            <select asp-for="BrandId" class="form-control" asp-items="ViewBag.BrandId">
+                                <option value="">-- Select Brand --</option>
+                            </select>
+                            <span asp-validation-for="BrandId" class="text-danger"></span>
+                        </div>
+
+                        <!-- Live preview -->
+                        <div class="mt-2">
+                            <img id="carPreview" class="img-thumbnail d-none" style="max-height:150px;" alt="Car preview" />
+                        </div>
+
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-success">Save</button>
+                            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.querySelector('input[name="CarImageFile"]').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const preview = document.getElementById("carPreview");
+                preview.src = URL.createObjectURL(file);
+                preview.classList.remove("d-none");
+            }
+        });
+    </script>
+}

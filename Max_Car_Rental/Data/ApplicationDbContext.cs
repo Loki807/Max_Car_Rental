@@ -12,6 +12,6 @@ namespace Max_Car_Rental.Data
         
         }
         public DbSet<Brand> Brands { get; set; }
-       
+        public DbSet<Car> Cars { get; set; }
     }
 }

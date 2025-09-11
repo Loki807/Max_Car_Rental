@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Max_Car_Rental.Models.Car>
+
+@{
+    ViewData["Title"] = "Car List";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Car List</h2>
+    <a asp-action="Create" class="btn btn-primary mb-3">+ Add Car</a>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Car Name</th>
+                <th>Car Model</th>
+                <th>Image</th>
+                <th>Availability</th>
+                <th>Brand</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var car in Model)
+            {
+                <tr>
+                    <td>@car.CarName</td>
+                    <td>@car.CarModel</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(car.ImageUrl))
+                        {
+                            <img src="@car.ImageUrl" alt="Car Image" width="100" height="60" style="object-fit:cover;" />
+                        }
+                    </td>
+                    <td>
+                        @if (car.Availability)
+                        {
+                            <span class="badge bg-success">Available</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Booked</span>
+                        }
+                    </td>
+                    <td>@car.Brand?.Name</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@car.CarId" class="btn btn-info btn-sm">Details</a>
+                        <a asp-action="Edit" asp-route-id="@car.CarId" class="btn btn-warning btn-sm">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@car.CarId" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
